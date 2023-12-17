@@ -1,36 +1,8 @@
-const posts = [
-    {
-        name: "Vincent van Gogh",
-        username: "vincey1853",
-        location: "Zundert, Netherlands",
-        avatar: "images/avatar-vangogh.jpg",
-        post: "images/post-vangogh.jpg",
-        comment: "just took a few mushrooms lol",
-        likes: 21
-    },
-    {
-        name: "Gustave Courbet",
-        username: "gus1819",
-        location: "Ornans, France",
-        avatar: "images/avatar-courbet.jpg",
-        post: "images/post-courbet.jpg",
-        comment: "i'm feelin a bit stressed tbh",
-        likes: 4
-    },
-        {
-        name: "Joseph Ducreux",
-        username: "jd1735",
-        location: "Paris, France",
-        avatar: "images/avatar-ducreux.jpg",
-        post: "images/post-ducreux.jpg",
-        comment: "gm friends! which coin are YOU stacking up today?? post below and WAGMI!",
-        likes: 152
-    }
-]
+import { posts } from "/data.js"
 
 //Elements needed for updating like count
-const btnLikeEl = document.getElementById("btn-like-el")
-const likesCountEl = document.getElementById("likes-count-el")
+// const btnLikeEl = document.getElementById("btn-like-el")
+// const likesCountEl = document.getElementById("likes-count-el")
 let clicked = false
 
 //Elements needed for constructing post and displaying to window
@@ -38,122 +10,55 @@ const mainEl = document.getElementById("main-el")
 
 //Displays posts on window
 window.addEventListener("DOMContentLoaded", function(){
-    let newPost
     for(let i = 0; i < posts.length; i++) {
-        newPost = constructPost(posts[i])
-        mainEl.appendChild(newPost)
+        render(posts[i])
     }
 })
 
 //creation of post section
-function constructPost(post) {
-    const newSectionEl = document.createElement("section")
-    
-    const postHeaderDivEl = createDivEl("post-header")      
-
-    const postUserAnchorEl = document.createElement("a")
-    postUserAnchorEl.setAttribute("href", "#")
-
-    const postUserImgEl = createImgEl("src", `${post.avatar}`, "user-img")                   
-
-    const newContainerDivEl = createDivEl()      
-
-    const postUserNameH2El = document.createElement("h2") 
-    postUserNameH2El.classList.add("user-name", "bold-text")
-    postUserNameH2El.textContent = `${post.name}`
-
-    const postUserLocationPEl = createPEl()                 
-    postUserLocationPEl.classList.add("user-location")
-    postUserLocationPEl.textContent = `${post.location}`
-
-    const postImgEl = createImgEl("src", `${post.post}`, "main-img")                      
-    
-    const btnContainerDivEl = createDivEl()                 
-    btnContainerDivEl.classList.add("btn-container")
-
-    const likeBtnEl = createBtnEl()                     
-    likeBtnEl.setAttribute("id", "btn-like-el")
-    const likeBtnIconEl = document.createElement("i")                     
-    likeBtnIconEl.classList.add("fa-regular", "fa-heart", "fa-2xl", "icon")
-
-    const commentBtnEl = createBtnEl()                  
-    const commentBtnImgEl = createImgEl("src", "images/icon-comment.png", "icon")                  
-
-    const dmBtnEl = createBtnEl()                       
-    const dmBtnImgEl = createImgEl("src", "images/icon-dm.png", "icon")                      
-
-    const likesAmmtPEl = createPEl()                        
-    likesAmmtPEl.setAttribute("id", "likes-count-el")
-    likesAmmtPEl.classList.add("bold-text", "likes-count")
-    likesAmmtPEl.textContent = `${post.likes} likes`
-
-    const postCommentEl = createPEl()                       
-    postCommentEl.classList.add("bold-text", "comment")
-    const spanEl = document.createElement("span")                          
-    spanEl.classList.add("font-weight-normal")
-    spanEl.textContent = `${post.comment}`
-    postCommentEl.textContent = `${post.username} `
-    
-    newSectionEl.appendChild(postHeaderDivEl)
-    postHeaderDivEl.appendChild(postUserAnchorEl)
-    postUserAnchorEl.appendChild(postUserImgEl)
-    postHeaderDivEl.appendChild(newContainerDivEl)
-    newContainerDivEl.appendChild(postUserNameH2El)
-    newContainerDivEl.appendChild(postUserLocationPEl)
-    newSectionEl.appendChild(postImgEl)
-    newSectionEl.appendChild(btnContainerDivEl)
-    btnContainerDivEl.appendChild(likeBtnEl)
-    likeBtnEl.appendChild(likeBtnIconEl)
-    btnContainerDivEl.appendChild(commentBtnEl)
-    commentBtnEl.appendChild(commentBtnImgEl)
-    btnContainerDivEl.appendChild(dmBtnEl)
-    dmBtnEl.appendChild(dmBtnImgEl)
-    newSectionEl.appendChild(likesAmmtPEl)
-    postCommentEl.appendChild(spanEl)
-    newSectionEl.appendChild(postCommentEl)
-
-    //handles like status
-    likeBtnEl.addEventListener("click", function() {
-       
-        if(clicked === true) {
-            removeLike(post)
-            setLikeStatus(likesAmmtPEl, likeBtnIconEl, post)
-        }
-        else {
-            addLike(post)  
-            setLikeStatus(likesAmmtPEl, likeBtnIconEl, post)
-        }
-    })
-    
-    return newSectionEl
-
-}
-
-//Handle creation of repeated elements
-function createDivEl(className) {
-    if(className) {
-        const div = document.createElement("div")
-        div.classList.add(className)
-        return div
-    }
-    else {
-        return document.createElement("div")
-    }
-}
-
-function createImgEl(attributeType, attributeName, className) {
-    const img = document.createElement("img")
-    img.setAttribute(attributeType, attributeName)
-    img.classList.add(className)
-    return img
-}
-
-function createPEl() {
-    return document.createElement("p")
-}
-
-function createBtnEl() {
-    return document.createElement("button")
+function render(post) {
+    mainEl.innerHTML += `<section>
+                            <div class="post-header">
+                                <a href="#">
+                                    <img src="${post.avatar}" class="user-img">
+                                </a>
+                                <div>
+                                    <h2 class="user-name bolt-text">${post.name}</h2>
+                                    <p class="user-location">${post.location}</p>
+                                </div>
+                            </div>
+                            <img src="${post.post}" class="main-img">
+                            <div class="btn-container">
+                                <button id="btn-like-el">
+                                    <i id="icon" class="fa-regular fa-heart fa-2xl icon"></i>
+                                </button>
+                                <button>
+                                    <img src="images/icon-comment.png" class="icon">
+                                </button>
+                                <button>
+                                    <img src="images/icon-dm.png" class="icon">
+                                </button>
+                            </div>
+                            <p id="likes-count-el" class="bold-text likes-count">
+                                ${post.likes} likes
+                            </p>
+                            <p class="comment">
+                                <span class="bold-text">${post.username}</span> ${post.comment}
+                            </p>
+                        </section>
+                        `
+    //original
+    // handles like status
+    // btnLikeEl.addEventListener("click", function() {
+    //     // if(clicked === true) {
+    //     //     removeLike(post)
+    //     //     // setLikeStatus(likesAmmtPEl, likeBtnIconEl, post)
+    //     // }
+    //     // else {
+    //     //     addLike(post)  
+    //     //     // setLikeStatus(likesAmmtPEl, likeBtnIconEl, post)
+    //     // }
+    // })
 }
 
 //Handle likes
