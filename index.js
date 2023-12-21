@@ -1,81 +1,94 @@
 import { posts } from "/data.js"
 
 //Elements needed for updating like count
-// const btnLikeEl = document.getElementById("btn-like-el")
-// const likesCountEl = document.getElementById("likes-count-el")
-let clicked = false
+let isLiked = false
 
-//Elements needed for constructing post and displaying to window
+//Elements needed for displaying to window
 const mainEl = document.getElementById("main-el")
 
-//Displays posts on window
-window.addEventListener("DOMContentLoaded", function(){
-    for(let i = 0; i < posts.length; i++) {
-        render(posts[i])
-    }
-})
+//Display posts 
+function renderPost() {
+    mainEl.innerHTML = constructPost() 
+    setLikeStatus()
+}   
 
-//creation of post section
-function render(post) {
-    mainEl.innerHTML += `<section>
-                            <div class="post-header">
-                                <a href="#">
-                                    <img src="${post.avatar}" class="user-img">
-                                </a>
-                                <div>
-                                    <h2 class="user-name bolt-text">${post.name}</h2>
-                                    <p class="user-location">${post.location}</p>
-                                </div>
-                            </div>
-                            <img src="${post.post}" class="main-img">
-                            <div class="btn-container">
-                                <button id="btn-like-el">
-                                    <i id="icon" class="fa-regular fa-heart fa-2xl icon"></i>
-                                </button>
-                                <button>
-                                    <img src="images/icon-comment.png" class="icon">
-                                </button>
-                                <button>
-                                    <img src="images/icon-dm.png" class="icon">
-                                </button>
-                            </div>
-                            <p id="likes-count-el" class="bold-text likes-count">
-                                ${post.likes} likes
-                            </p>
-                            <p class="comment">
-                                <span class="bold-text">${post.username}</span> ${post.comment}
-                            </p>
-                        </section>
-                        `
-    //original
-    // handles like status
-    // btnLikeEl.addEventListener("click", function() {
-    //     // if(clicked === true) {
-    //     //     removeLike(post)
-    //     //     // setLikeStatus(likesAmmtPEl, likeBtnIconEl, post)
-    //     // }
-    //     // else {
-    //     //     addLike(post)  
-    //     //     // setLikeStatus(likesAmmtPEl, likeBtnIconEl, post)
-    //     // }
-    // })
+//creation of post sections
+function constructPost() {
+    let section = ""
+    let postNumber = 0
+
+    for (let post of posts) {
+        postNumber = posts.indexOf(post)
+
+        section += `<section>
+                    <div class="post-header">
+                        <a href="#">
+                            <img src="${post.avatar}" class="user-img">
+                        </a>
+                        <div>
+                            <h2 class="user-name bolt-text">${post.name}</h2>
+                            <p class="user-location">${post.location}</p>
+                        </div>
+                    </div>
+                    <img src="${post.post}" class="main-img">
+                    <div class="btn-container">
+                        <button id="btn-like-${postNumber}">
+                            <i id="${postNumber}" class="fa-regular fa-heart fa-2xl icon"></i>
+                        </button>
+                        <button>
+                            <img src="images/icon-comment.png" class="icon">
+                        </button>
+                        <button>
+                            <img src="images/icon-dm.png" class="icon">
+                        </button>
+                    </div>
+                    <p id="likes-count-${postNumber}" class="bold-text likes-count">
+                        ${post.likes} likes
+                    </p>
+                    <p class="comment">
+                        <span class="bold-text">${post.username}</span> ${post.comment}
+                    </p>
+                </section>
+                `
+    }
+    return section
+}
+
+//Update the likes count
+function setLikeStatus() {
+    for(let post of posts) {
+        let postNumber = posts.indexOf(post)
+        const btnLike = document.getElementById(`btn-like-${postNumber}`)
+        
+        btnLike.addEventListener("click", () => toggleLikesStatus(post, postNumber))
+    }
+}
+
+function toggleLikesStatus(post, postNumber) {
+    const iconLikeEl = document.getElementById(`${postNumber}`)
+    const likesCountEl = document.getElementById(`likes-count-${postNumber}`)
+    
+    if (isLiked) {
+        removeLike(post)
+        iconLikeEl.classList.toggle("fa-solid")
+        likesCountEl.textContent = `${post.likes} likes`
+    }
+    else {
+        addLike(post)
+        iconLikeEl.classList.toggle("fa-solid")
+        likesCountEl.textContent = `${post.likes} likes`
+    }
 }
 
 //Handle likes
 function addLike(post) {
     post.likes += 1
-    clicked = true
+    isLiked = true
 }
 
 function removeLike(post) {
     post.likes -= 1
-    clicked = false
+    isLiked = false
 }
 
-function setLikeStatus(likesEl, likeIcon, post) {
-    likesEl.textContent = `${post.likes} likes`
-    likeIcon.classList.toggle("fa-solid")
-}
-
-
-
+renderPost(posts) 
