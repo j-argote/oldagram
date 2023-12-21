@@ -64,6 +64,7 @@ function setLikeStatus() {
     }
 }
 
+//Handle likes
 function toggleLikesStatus(post, postNumber) {
     const iconLikeEl = document.getElementById(`${postNumber}`)
     const likesCountEl = document.getElementById(`likes-count-${postNumber}`)
@@ -80,7 +81,6 @@ function toggleLikesStatus(post, postNumber) {
     }
 }
 
-//Handle likes
 function addLike(post) {
     post.likes += 1
     isLiked = true
